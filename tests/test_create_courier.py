@@ -1,9 +1,10 @@
 import allure
 import pytest
 import requests
-from helps import DataCourier
+from couriers_requests import DataCourier
 from endpoints import Endpoints
 from urls import Urls
+from data import DataTextAnswer
 
 
 class TestCreateCourier:
@@ -20,7 +21,7 @@ class TestCreateCourier:
     def test_registration_double_courier_failed(self, courier):
         response = requests.post(f'{Urls.BASE_URL}{Endpoints.create_courier}', data=courier["data"])
         assert response.status_code == 409
-        assert "Этот логин уже используется" in response.text
+        assert DataTextAnswer.login_not_avaiable in response.text
 
     @allure.title('Проверка чтобы создать курьера, нужно передать в ручку все обязательные поля Login/Password')
     @allure.description('Отправляем запрос на создание курьера без заполнения обязательных полей Login/Password и проверяем ответ')
@@ -29,4 +30,4 @@ class TestCreateCourier:
     def test_courier_registration_without_parameters_failed(self, courier_data):
         response = requests.post(f'{Urls.BASE_URL}{Endpoints.create_courier}', data=courier_data)
         assert response.status_code == 400
-        assert "Недостаточно данных для создания учетной записи" in response.text
+        assert DataTextAnswer.need_more_data_sign in response.text

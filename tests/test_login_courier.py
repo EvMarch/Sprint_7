@@ -1,10 +1,10 @@
 import allure
 import pytest
 import requests
-from helps import DataCourier, Courier
+from couriers_requests import DataCourier, Courier
 from endpoints import Endpoints
 from urls import Urls
-
+from data import DataTextAnswer
 
 class TestLoginCourier:
 
@@ -24,11 +24,11 @@ class TestLoginCourier:
     def test_courier_login_without_parameters_failed(self, courier_data):
         response = requests.post(f'{Urls.BASE_URL}{Endpoints.login_courier}', data=courier_data)
         assert response.status_code == 400
-        assert "Недостаточно данных для входа" in response.text
+        assert DataTextAnswer.need_more_data_login in response.text
 
     @allure.title('Проверка авторизоваться под несуществующим пользователем, запрос возвращает ошибку')
     @allure.description('Отправляем запрос на авторизацию в сервисе с несуществующими данными и проверяем ответ')
     def test_courier_login_without_null_login_failed(self):
         response = requests.post(f'{Urls.BASE_URL}{Endpoints.login_courier}', data=DataCourier.null_data_login)
         assert response.status_code == 404
-        assert "Учетная запись не найдена" in response.text
+        assert DataTextAnswer.courier_login_not_found in response.text

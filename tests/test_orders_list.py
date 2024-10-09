@@ -2,7 +2,7 @@ import allure
 import requests
 from endpoints import Endpoints
 from urls import Urls
-
+from data import DataTextAnswer
 
 class TestOrdersList:
 
@@ -11,4 +11,4 @@ class TestOrdersList:
     def test_list_orders_success(self):
         response = requests.get(f'{Urls.BASE_URL}{Endpoints.get_orders_list}')
         assert response.status_code == 200
-        assert "track" in response.text
+        assert DataTextAnswer.order_list in response.text

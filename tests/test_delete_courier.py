@@ -1,5 +1,6 @@
 import allure
-from helps import Courier
+from couriers_requests import Courier
+from data import DataTextAnswer
 
 
 class TestDeleteCourier:
@@ -19,7 +20,7 @@ class TestDeleteCourier:
         courier_id = '123456'
         response = Courier().courier_subsequent_deletion(courier_id)
         assert response["status_code"] == 404
-        assert "Курьера с таким id нет" in response["response_text"]
+        assert DataTextAnswer.courier_id_not_found in response["response_text"]
 
     @allure.title('Проверка создания нового курьера')
     @allure.description('Отправляем запрос на удаление курьера без ID и проверяем ответ')
@@ -27,4 +28,4 @@ class TestDeleteCourier:
         courier_id = None
         response = Courier().courier_subsequent_deletion(courier_id)
         assert response["status_code"] == 500
-        assert "invalid input syntax" in response["response_text"]
+        assert DataTextAnswer.invalid_syntax in response["response_text"]
